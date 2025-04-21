@@ -21,6 +21,17 @@ pipeline{
                 sh "docker push ${env.IMAGE_NAME}:${env.BUILD_ID}" 
             }
         }
+
+        stage('Approval Required') {
+            steps {
+                script {
+                    def userInput = input(id: 'userInput', message: 'Approve and Provide docker image', parameters: [
+                        string(name: 'DOCKER_IMAGE', defaultValue: 'defaultValue', description: 'Enter the docker image')
+                    ])
+                    env.DOCKER_IMAGE = userInput
+                }
+            }
+	    }
     }
 
     post{
